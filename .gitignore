@@ -1,0 +1,140 @@
+# Java
+*.class
+*.log
+*.ctxt
+.mtj.tmp/
+hs_err_pid*
+replay_pid*
+*.hprof
+*.jfr
+
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+!gradle/wrapper/gradle-wrapper.jar
+
+# Gradle
+.gradle/
+build/
+gradle-app.setting
+.gradletasknamecache
+local.properties
+gradle.properties.local
+*.gradle.local
+
+# Minecraft
+run/
+runs/
+run-*/
+**/run/
+.loom-cache/
+loom-cache/
+remappedSrc/
+minecraft/
+crash-reports/
+logs/
+screenshots/
+saves/
+options.txt
+usercache.json
+usernamecache.json
+banned-ips.json
+banned-players.json
+ops.json
+whitelist.json
+eula.txt
+server.properties
+world/
+steam_appid.txt
+
+# Kotlin
+.kotlin/
+*.kotlin_module
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+.shelf/
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata/
+bin/
+.factorypath
+.apt_generated/
+.externalToolBuilders/
+*.launch
+# VS Code
+.vscode/
+*.code-workspace
+.history/
+# NetBeans
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+*.swp
+*.swo
+*~
+\#*\#
+.\#*
+*.bak
+*.tmp
+*.orig
+*.rej
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.TemporaryItems
+.DocumentRevisions-V100
+# Linux
+.directory
+.Trash-*
+.nfs*
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+secrets.properties
+signing.properties
+
+# Local tools
+.claude/
+.serena/
+.headroom*
+CLAUDE.md
+
+# Project
+docs

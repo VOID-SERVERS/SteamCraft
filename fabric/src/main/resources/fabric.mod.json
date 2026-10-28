@@ -1,0 +1,27 @@
+{
+	"schemaVersion": 1,
+	"id": "steamcraft",
+	"version": "${version}",
+	"name": "SteamCraft",
+	"description": "Steam co-op, Steam/Minecraft whitelists and optional Steam sign-in for servers. Vanilla servers and clients keep working.",
+	"authors": ["WineInjir"],
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["dev.steamcraft.fabric.SteamCraftFabric"],
+		"client": ["dev.steamcraft.fabric.client.SteamCraftClient"]
+	},
+	"mixins": [
+		"steamcraft.mixins.json",
+		{
+			"config": "steamcraft.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"minecraft": "${minecraft}",
+		"java": ">=${java_version}",
+		"fabric-api": "*"
+	}
+}

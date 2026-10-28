@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "steamcraft"
+version = "${version}"
+displayName = "SteamCraft"
+authors = "WineInjir"
+description = '''
+Steam co-op, Steam/Minecraft whitelists and optional Steam sign-in for servers. Vanilla servers and clients keep working.
+'''
+
+[[mixins]]
+config = "steamcraft.mixins.json"
+
+[[mixins]]
+config = "steamcraft.client.mixins.json"
+
+[[mixins]]
+config = "steamcraft.neoforge.mixins.json"
+
+[[dependencies.steamcraft]]
+modId = "neoforge"
+type = "required"
+versionRange = "${neoforge}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.steamcraft]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft}"
+ordering = "NONE"
+side = "BOTH"

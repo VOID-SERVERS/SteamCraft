@@ -1,0 +1,17 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.steamcraft.common.client.mixin",
+	"compatibilityLevel": "${java}",
+	"client": [
+		"IntegratedServerAccessor",
+		"JoinMultiplayerScreenMixin",
+		"MinecraftMixin",
+		"PauseScreenMixin",
+		"PlayerInfoMixin",
+		"ServerNameResolverMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

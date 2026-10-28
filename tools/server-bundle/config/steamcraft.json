@@ -1,0 +1,9 @@
+{
+  "steamAppId": 480,
+  "auth": {
+    "ticketTimeoutSeconds": 10
+  },
+  "coop": {
+    "access": "FRIENDS"
+  }
+}

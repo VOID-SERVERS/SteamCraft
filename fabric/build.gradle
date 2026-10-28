@@ -1,0 +1,146 @@
+plugins {
+	id 'dev.kikugie.loom-back-compat'
+}
+
+def mc = stonecutter.current.version
+def common = project(":${mc}")
+def javaVersion = stonecutter.eval(mc, '>=26.1') ? 25 : 21
+
+group = project.maven_group
+version = project.mod_version
+
+repositories {
+	mavenCentral()
+}
+
+base {
+	archivesName = "steamcraft-fabric-${mc}"
+}
+
+loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		"steamcraft" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+
+	if (project.hasProperty('join')) {
+		runs {
+			client {
+				programArgs '--quickPlayMultiplayer', project.property('join').toString()
+			}
+		}
+	}
+
+	if (project.hasProperty('steamOverlay')) {
+		def overlay = file("${System.getProperty('user.home')}/.local/share/Steam/ubuntu12_64/gameoverlayrenderer.so")
+		runs {
+			client {
+				environmentVariable 'LD_PRELOAD', overlay.absolutePath
+				environmentVariable 'SteamAppId', '480'
+				environmentVariable 'SteamGameId', '480'
+			}
+		}
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${mc}"
+	loomx.applyMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	implementation project(':core')
+	include "com.code-disaster.steamworks4j:steamworks4j:${project.steamworks4j_version}"
+	include "com.code-disaster.steamworks4j:steamworks4j-server:${project.steamworks4j_version}"
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(javaVersion)
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = javaVersion
+	it.options.encoding = 'UTF-8'
+}
+
+processResources {
+	def values = [version: project.version, minecraft: project.minecraft_range, java: "JAVA_${javaVersion}", java_version: javaVersion]
+	inputs.properties values
+	filesMatching(["fabric.mod.json", "*.mixins.json"]) {
+		expand values
+	}
+}
+
+tasks.named('processClientResources', ProcessResources) {
+	def values = [java: "JAVA_${javaVersion}"]
+	inputs.properties values
+	filesMatching("*.mixins.json") {
+		expand values
+	}
+}
+
+evaluationDependsOn(common.path)
+def commonSources = common.sourceSets
+
+tasks.named('compileJava', JavaCompile) { source(commonSources.main.java) }
+tasks.named('compileClientJava', JavaCompile) { source(commonSources.client.java) }
+tasks.named('processResources', ProcessResources) { from(commonSources.main.resources) }
+tasks.named('processClientResources', ProcessResources) { from(commonSources.client.resources) }
+
+jar {
+	from(project(':core').sourceSets.main.output)
+	from(rootProject.file('LICENSE')) {
+		rename { "${it}_steamcraft" }
+	}
+}
+
+configurations {
+	bundleMods { transitive = false }
+}
+
+dependencies {
+	bundleMods "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+def serverLauncher = layout.buildDirectory.file("server-launcher/fabric-server-launch.jar")
+
+tasks.register('downloadServerLauncher') {
+	def url = "https://meta.fabricmc.net/v2/versions/loader/${mc}/${project.loader_version}/${project.fabric_installer_version}/server/jar"
+	inputs.property 'url', url
+	outputs.file serverLauncher
+	doLast {
+		def out = serverLauncher.get().asFile
+		out.parentFile.mkdirs()
+		new URL(url).withInputStream { input -> out.withOutputStream { it << input } }
+	}
+}
+
+tasks.register('serverBundle', Zip) {
+	group = 'distribution'
+	description = 'Packs a Fabric dedicated server with SteamCraft for testing on another machine.'
+	archiveFileName = "steamcraft-server-${mc}-${project.version}.zip"
+	destinationDirectory = layout.buildDirectory.dir('distributions')
+	def root = "steamcraft-server-${mc}"
+	into(root) {
+		from(rootProject.file('tools/server-bundle')) {
+			filesMatching('*.sh') { it.permissions { unix(0755) } }
+		}
+		from(tasks.named('downloadServerLauncher'))
+	}
+	into("${root}/mods") {
+		from(loomx.modJar)
+		from(configurations.bundleMods)
+	}
+}
+
+def collectJar = tasks.register('collectJar', Copy) {
+	from(loomx.modJar)
+	into(rootProject.layout.buildDirectory.dir('libs'))
+}
+tasks.named('build') { finalizedBy(collectJar) }

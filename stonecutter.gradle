@@ -1,0 +1,42 @@
+plugins {
+	id 'dev.kikugie.stonecutter'
+}
+
+stonecutter.active '1.21.1'
+
+stonecutter.parameters {
+	replacements {
+		string(stonecutter.eval(current.version, '>=1.21.9')) {
+			replace('net.minecraft.client.resources.PlayerSkin', 'net.minecraft.world.entity.player.PlayerSkin')
+		}
+		string(stonecutter.eval(current.version, '>=1.21.11')) {
+			replace('ResourceLocation', 'Identifier')
+			replace('import net.minecraft.Util;', 'import net.minecraft.util.Util;')
+		}
+		string(stonecutter.eval(current.version, '>=26.1')) {
+			replace('GuiGraphics', 'GuiGraphicsExtractor')
+			replace('graphics.drawString(', 'graphics.text(')
+			replace('graphics.drawCenteredString(', 'graphics.centeredText(')
+			replace('graphics.renderOutline(', 'graphics.outline(')
+			replace('void renderWidget(', 'void extractWidgetRenderState(')
+			replace('void renderContents(', 'void extractContents(')
+			replace('void render(', 'void extractRenderState(')
+			replace('super.render(', 'super.extractRenderState(')
+			replace('method = "render"', 'method = "extractRenderState"')
+			replace('PlayerFaceRenderer.draw(', 'PlayerFaceExtractor.extractRenderState(')
+			replace('import net.minecraft.client.gui.components.PlayerFaceRenderer;', 'import net.minecraft.client.gui.components.PlayerFaceExtractor;')
+			replace('tabs.setWidth(', 'tabs.updateWidth(')
+			replace('.getDayTime()', '.getOverworldClockTime()')
+			replace('PacketByteBufs', 'FriendlyByteBufs')
+			replace('S2CPlayChannelEvents', 'ClientboundPlayChannelEvents')
+			replace('PayloadTypeRegistry.playC2S()', 'PayloadTypeRegistry.serverboundPlay()')
+			replace('PayloadTypeRegistry.playS2C()', 'PayloadTypeRegistry.clientboundPlay()')
+		}
+		string(stonecutter.eval(current.version, '>=26.2')) {
+			replace('.setScreen(', '.gui.setScreen(')
+			replace('minecraft.screen != null ? minecraft.screen :', 'minecraft.gui.screen() != null ? minecraft.gui.screen() :')
+			replace('.getToastManager()', '.gui.toastManager()')
+			replace('TabNavigationBar', 'MenuTabBar')
+		}
+	}
+}

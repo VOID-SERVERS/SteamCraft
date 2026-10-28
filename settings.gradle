@@ -1,0 +1,49 @@
+pluginManagement {
+	repositories {
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		maven {
+			name = 'NeoForged'
+			url = 'https://maven.neoforged.net/releases'
+		}
+		maven {
+			name = 'KikuGie'
+			url = 'https://maven.kikugie.dev/releases'
+		}
+		mavenCentral()
+		gradlePluginPortal()
+	}
+}
+
+plugins {
+	id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+	id 'dev.kikugie.stonecutter' version '0.9.8'
+	id 'dev.kikugie.loom-back-compat' version '0.4.3'
+}
+
+rootProject.name = 'steamcraft'
+
+include 'core'
+include 'login-probe'
+project(':login-probe').projectDir = file('tools/login-probe')
+
+stonecutter {
+	create(rootProject) {
+		versions '1.21.1', '1.21.3', '1.21.4', '1.21.5', '1.21.8', '1.21.10', '1.21.11', '26.1.2', '26.2', '26.3'
+		branch 'fabric'
+		branch 'neoforge'
+		vcsVersion = '1.21.1'
+	}
+}
+
+gradle.beforeProject { project ->
+	project.buildscript.repositories {
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		gradlePluginPortal()
+	}
+}

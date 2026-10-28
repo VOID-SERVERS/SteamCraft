@@ -1,0 +1,41 @@
+plugins {
+	id 'application'
+}
+
+group = project.maven_group
+version = project.mod_version
+
+repositories {
+	mavenCentral()
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+dependencies {
+	implementation project(':core')
+	runtimeOnly 'com.google.code.gson:gson:2.8.9'
+}
+
+application {
+	mainClass = 'dev.steamcraft.probe.LoginProbe'
+}
+
+tasks.named('run') {
+	workingDir = layout.buildDirectory.dir('run').get().asFile
+	doFirst { workingDir.mkdirs() }
+}
+
+def revocationCheck = tasks.register('revocationCheckScripts', CreateStartScripts) {
+	mainClass = 'dev.steamcraft.probe.RevocationCheck'
+	applicationName = 'revocation-check'
+	outputDir = layout.buildDirectory.dir('revocation-scripts').get().asFile
+	classpath = tasks.named('startScripts').get().classpath
+}
+
+distributions.main.contents {
+	from(revocationCheck) { into 'bin' }
+}

@@ -1,0 +1,100 @@
+plugins {
+	id 'net.neoforged.moddev' version "${moddev_version}"
+}
+
+def mc = stonecutter.current.version
+def common = project(":${mc}")
+def javaVersion = stonecutter.eval(mc, '>=26.1') ? 25 : 21
+
+group = project.maven_group
+version = project.mod_version
+
+repositories {
+	mavenCentral()
+}
+
+base {
+	archivesName = "steamcraft-neoforge-${mc}"
+}
+
+neoForge {
+	version = project.neoforge_version
+
+	runs {
+		client {
+			client()
+			if (project.hasProperty('join')) programArguments.addAll('--quickPlayMultiplayer', project.property('join').toString())
+		}
+		server {
+			server()
+			programArgument '--nogui'
+		}
+	}
+
+	mods {
+		"steamcraft" {
+			sourceSet sourceSets.main
+		}
+	}
+}
+
+evaluationDependsOn(common.path)
+def commonSources = common.sourceSets
+def core = project(':core').sourceSets
+
+configurations {
+	steamworks { transitive = false }
+	compileOnly.extendsFrom steamworks
+}
+
+dependencies {
+	steamworks "com.code-disaster.steamworks4j:steamworks4j:${project.steamworks4j_version}"
+	steamworks "com.code-disaster.steamworks4j:steamworks4j-server:${project.steamworks4j_version}"
+}
+
+def unpackSteamworks = tasks.register('unpackSteamworks', Sync) {
+	from(configurations.steamworks.elements.map { jars -> jars.collect { zipTree(it) } }) {
+		exclude 'META-INF/**'
+	}
+	into layout.buildDirectory.dir('steamworks')
+}
+sourceSets.main.resources.srcDir(unpackSteamworks)
+
+tasks.named('compileJava', JavaCompile) {
+	source(core.main.java)
+	source(commonSources.main.java)
+	source(commonSources.client.java)
+}
+
+processResources {
+	from(commonSources.main.resources)
+	from(commonSources.client.resources)
+	def values = [version: project.version, minecraft: project.minecraft_range, neoforge: project.neoforge_range, java: "JAVA_${javaVersion}"]
+	inputs.properties values
+	filesMatching(["META-INF/neoforge.mods.toml", "*.mixins.json"]) {
+		expand values
+	}
+}
+
+jar {
+	from(rootProject.file('LICENSE')) {
+		rename { "${it}_steamcraft" }
+	}
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(javaVersion)
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = javaVersion
+	it.options.encoding = 'UTF-8'
+}
+
+def collectJar = tasks.register('collectJar', Copy) {
+	from(tasks.named('jar'))
+	into(rootProject.layout.buildDirectory.dir('libs'))
+}
+tasks.named('build') { finalizedBy(collectJar) }

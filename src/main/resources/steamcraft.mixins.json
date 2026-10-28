@@ -1,0 +1,16 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.steamcraft.common.mixin",
+	"compatibilityLevel": "${java}",
+	"mixins": [
+		"AdminCommandsMixin",
+		"GameProfileCacheMixin",
+		"MinecraftServerMixin",
+		"PlayerListMixin",
+		"ServerLoginPacketListenerImplMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
