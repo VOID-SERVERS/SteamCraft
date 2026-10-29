@@ -5,6 +5,7 @@ plugins {
 def mc = stonecutter.current.version
 def common = project(":${mc}")
 def javaVersion = stonecutter.eval(mc, '>=26.1') ? 25 : 21
+def metadataVersion = project.mod_version.replaceFirst(/^([a-z]+)-(.+)$/, '$2-$1')
 
 group = project.maven_group
 version = project.mod_version
@@ -72,7 +73,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 processResources {
-	def values = [version: project.version, minecraft: project.minecraft_range, java: "JAVA_${javaVersion}", java_version: javaVersion]
+	def values = [version: metadataVersion, minecraft: project.minecraft_range, java: "JAVA_${javaVersion}", java_version: javaVersion]
 	inputs.properties values
 	filesMatching(["fabric.mod.json", "*.mixins.json"]) {
 		expand values
