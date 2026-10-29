@@ -71,8 +71,10 @@ public final class Gfx {
 	}
 
 	public static void label(GuiGraphics graphics, Font font, Component text, int left, int top, int right, int bottom, int color) {
+		FormattedCharSequence line = fit(font, text, right - left);
+		int x = left + Math.max(0, (right - left - font.width(line)) / 2);
 		int y = top + (bottom - top - font.lineHeight) / 2 + 1;
-		graphics.drawString(font, fit(font, text, right - left), left, y, color);
+		graphics.drawString(font, line, x, y, color);
 	}
 
 	public static FormattedCharSequence fit(Font font, Component text, int maxWidth) {

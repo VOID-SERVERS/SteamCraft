@@ -28,10 +28,8 @@
 	"steamcraft.panel.knocking": "Хочет войти в ваш мир",
 	"steamcraft.panel.let_in": "Пустить",
 	"steamcraft.panel.dismiss": "Скрыть",
-	"steamcraft.panel.in_world": "В этом мире",
-	"steamcraft.panel.lan_player": "Вошёл по локальной сети",
-	"steamcraft.panel.steam_player": "Вошёл через Steam · ПКМ — действия",
-	"steamcraft.panel.operator": "Оператор · ПКМ — действия",
+	"steamcraft.panel.lan_player": "вошёл по локальной сети",
+	"steamcraft.panel.operator": "оператор",
 	"steamcraft.panel.op": "Сделать оператором",
 	"steamcraft.panel.deop": "Снять оператора",
 	"steamcraft.panel.kick": "Выгнать",
@@ -131,5 +129,9 @@
 	"steamcraft.skin.no_capes": "В папке capes пока нет PNG: откройте её и положите туда файлы или перетащите их в это окно.",
 	"steamcraft.pause.skin_title": "Скин",
 	"steamcraft.pause.apply": "Применить",
-	"steamcraft.pause.applied": "Применено"
+	"steamcraft.pause.applied": "Применено",
+	"steamcraft.panel.who.friend": "Друг в Steam",
+	"steamcraft.panel.who.steam": "Игрок Steam",
+	"steamcraft.panel.who.player": "Игрок",
+	"steamcraft.panel.actions": "ПКМ — действия"
 }

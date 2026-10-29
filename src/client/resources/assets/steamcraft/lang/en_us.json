@@ -28,10 +28,8 @@
 	"steamcraft.panel.knocking": "Wants to join your world",
 	"steamcraft.panel.let_in": "Let in",
 	"steamcraft.panel.dismiss": "Dismiss",
-	"steamcraft.panel.in_world": "In this world",
-	"steamcraft.panel.lan_player": "Joined over LAN",
-	"steamcraft.panel.steam_player": "Joined through Steam · right-click for actions",
-	"steamcraft.panel.operator": "Operator · right-click for actions",
+	"steamcraft.panel.lan_player": "joined over LAN",
+	"steamcraft.panel.operator": "operator",
 	"steamcraft.panel.op": "Make operator",
 	"steamcraft.panel.deop": "Remove operator",
 	"steamcraft.panel.kick": "Kick",
@@ -131,5 +129,9 @@
 	"steamcraft.skin.no_capes": "No PNG files in the capes folder yet: open it and put some there, or drop them onto this window.",
 	"steamcraft.pause.skin_title": "Skin",
 	"steamcraft.pause.apply": "Apply",
-	"steamcraft.pause.applied": "Applied"
+	"steamcraft.pause.applied": "Applied",
+	"steamcraft.panel.who.friend": "Steam friend",
+	"steamcraft.panel.who.steam": "Steam player",
+	"steamcraft.panel.who.player": "Player",
+	"steamcraft.panel.actions": "right-click for actions"
 }

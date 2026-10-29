@@ -19,7 +19,8 @@ public final class SteamCraftPresence {
 	static final String DIMENSION = "sc_dim";
 	static final String WORLD_NAME = "sc_name";
 	static final String HOST = "sc_host";
-	static final String[] KEYS = {KEY, WHERE, MODE, PLAYERS, DAY, DIMENSION, WORLD_NAME, HOST};
+	static final String PLAYER = "sc_player";
+	static final String[] KEYS = {KEY, WHERE, MODE, PLAYERS, DAY, DIMENSION, WORLD_NAME, HOST, PLAYER};
 	static final int MAX_NAME = 64;
 
 	public enum Where {
@@ -38,8 +39,14 @@ public final class SteamCraftPresence {
 		public final String dimension;
 		public final String worldName;
 		public final long host;
+		public final String player;
 
 		public Activity(Where where, CoopAccess hosting, String mode, int players, long day, String dimension, String worldName, long host) {
+			this(where, hosting, mode, players, day, dimension, worldName, host, null);
+		}
+
+		public Activity(Where where, CoopAccess hosting, String mode, int players, long day, String dimension, String worldName, long host,
+						String player) {
 			this.where = where;
 			this.hosting = hosting;
 			this.mode = mode;
@@ -48,6 +55,7 @@ public final class SteamCraftPresence {
 			this.dimension = dimension;
 			this.worldName = worldName;
 			this.host = host;
+			this.player = player;
 		}
 
 		public static Activity menu() {
@@ -68,6 +76,7 @@ public final class SteamCraftPresence {
 		values.put(DIMENSION, activity.dimension != null ? activity.dimension : "");
 		values.put(WORLD_NAME, activity.worldName != null ? cut(activity.worldName) : "");
 		values.put(HOST, activity.host != 0 ? Long.toUnsignedString(activity.host) : "");
+		values.put(PLAYER, activity.player != null ? cut(activity.player) : "");
 		return values;
 	}
 
@@ -83,7 +92,8 @@ public final class SteamCraftPresence {
 			}
 		}
 		return new Activity(where, hosting(state), text(value.apply(MODE)), (int) number(value.apply(PLAYERS)),
-				number(value.apply(DAY)), text(value.apply(DIMENSION)), text(value.apply(WORLD_NAME)), steamId(value.apply(HOST)));
+				number(value.apply(DAY)), text(value.apply(DIMENSION)), text(value.apply(WORLD_NAME)), steamId(value.apply(HOST)),
+				text(value.apply(PLAYER)));
 	}
 
 	private static String cut(String name) {

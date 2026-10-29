@@ -19,7 +19,7 @@ class SteamCraftPresenceTest {
 	@Test
 	void everyFieldSurvivesTheTrip() {
 		SteamCraftPresence.Activity sent = new SteamCraftPresence.Activity(SteamCraftPresence.Where.STEAM_GUEST, CoopAccess.INVITE,
-				"survival", 3, 34, "minecraft:the_nether", "New World", ALICE);
+				"survival", 3, 34, "minecraft:the_nether", "New World", ALICE, "Alice_MC");
 		SteamCraftPresence.Activity read = roundTrip(sent);
 		assertEquals(SteamCraftPresence.Where.STEAM_GUEST, read.where);
 		assertEquals(CoopAccess.INVITE, read.hosting);
@@ -29,6 +29,7 @@ class SteamCraftPresenceTest {
 		assertEquals("minecraft:the_nether", read.dimension);
 		assertEquals("New World", read.worldName);
 		assertEquals(ALICE, read.host);
+		assertEquals("Alice_MC", read.player);
 	}
 
 	@Test

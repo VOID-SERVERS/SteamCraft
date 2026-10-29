@@ -14,7 +14,7 @@ repositories {
 }
 
 base {
-	archivesName = "steamcraft-fabric-${mc}"
+	archivesName = "sc-fabric-${mc}"
 }
 
 loom {
@@ -126,9 +126,9 @@ tasks.register('downloadServerLauncher') {
 tasks.register('serverBundle', Zip) {
 	group = 'distribution'
 	description = 'Packs a Fabric dedicated server with SteamCraft for testing on another machine.'
-	archiveFileName = "steamcraft-server-${mc}-${project.version}.zip"
+	archiveFileName = "sc-server-${mc}-${project.version}.zip"
 	destinationDirectory = layout.buildDirectory.dir('distributions')
-	def root = "steamcraft-server-${mc}"
+	def root = "sc-server-${mc}"
 	into(root) {
 		from(rootProject.file('tools/server-bundle')) {
 			filesMatching('*.sh') { it.permissions { unix(0755) } }

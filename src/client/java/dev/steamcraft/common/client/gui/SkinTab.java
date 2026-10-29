@@ -86,6 +86,7 @@ final class SkinTab implements Tab {
 		openCapes = Button.builder(Component.translatable("steamcraft.skin.open_capes"), b -> openFolder(false)).build();
 		status = new MultiLineTextWidget(CommonComponents.EMPTY, minecraft.font);
 		hint = new MultiLineTextWidget(Component.translatable("steamcraft.skin.drop_hint").withStyle(ChatFormatting.GRAY), minecraft.font);
+		hint.setCentered(true);
 		update();
 	}
 
@@ -151,8 +152,8 @@ final class SkinTab implements Tab {
 		capeFile.setLimits(area.top(), area.bottom());
 		status.setMaxWidth(controls);
 		status.setPosition(x, y + 2);
-		hint.setMaxWidth(controls);
-		hint.setPosition(x, area.bottom() - 4 - 2 * minecraft.font.lineHeight);
+		hint.setMaxWidth(width);
+		hint.setPosition(area.left() + (area.width() - hint.getWidth()) / 2, area.bottom() - 6 - hint.getHeight());
 	}
 
 	private void skinSourceChanged(SkinSource source) {

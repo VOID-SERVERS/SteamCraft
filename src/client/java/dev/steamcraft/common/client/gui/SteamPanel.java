@@ -158,8 +158,10 @@ public final class SteamPanel {
 		for (PlayerInfo info : connection.getOnlinePlayers()) {
 			GameProfile profile = info.getProfile();
 			if (Profiles.id(profile).equals(minecraft.player.getUUID())) continue;
-			Long steamId = host != null ? host.steamIdOf(profile) : null;
 			String gameName = Profiles.name(profile);
+			Long steamId = host != null ? host.steamIdOf(profile) : null;
+			if (steamId == null) steamId = SteamPeople.friendPlaying(Profiles.id(profile), gameName);
+			boolean friend = steamId != null && SteamPeople.friend(steamId) != null;
 			String steamName = steamId != null ? SteamPeople.personaName(steamId) : null;
 			if (!FriendRows.matches(filter, gameName, steamName)) continue;
 			if (steamId != null) steamIds.add(steamId);
@@ -168,22 +170,22 @@ public final class SteamPanel {
 			if (steamName != null && !steamName.equalsIgnoreCase(gameName)) {
 				name.append(Component.literal(" (" + gameName + ")").withStyle(ChatFormatting.GRAY));
 			}
-			Component detail;
+			String who = friend ? "steamcraft.panel.who.friend" : steamId != null ? "steamcraft.panel.who.steam" : "steamcraft.panel.who.player";
+			MutableComponent detail = Component.translatable(who);
 			List<SteamList.MenuItem> menu = new ArrayList<>();
-			if (host == null) {
-				detail = Component.translatable("steamcraft.panel.in_world");
-			} else if (steamId == null) {
-				detail = Component.translatable("steamcraft.panel.lan_player");
-			} else {
+			if (host != null && steamId != null && host.steamIdOf(profile) != null) {
 				boolean op = host.operators().containsKey(steamId);
-				detail = Component.translatable(op ? "steamcraft.panel.operator" : "steamcraft.panel.steam_player");
+				if (op) detail.append(" · ").append(Component.translatable("steamcraft.panel.operator"));
 				long id = steamId;
 				menu.add(op ? new SteamList.MenuItem(Component.translatable("steamcraft.panel.deop"), () -> host.deop(id))
 						: new SteamList.MenuItem(Component.translatable("steamcraft.panel.op"), () -> host.op(id, gameName)));
+			} else if (host != null) {
+				detail.append(" · ").append(Component.translatable("steamcraft.panel.lan_player"));
 			}
+			if (host != null) detail.append(" · ").append(Component.translatable("steamcraft.panel.actions"));
 			if (host != null) menu.add(new SteamList.MenuItem(Component.translatable("steamcraft.panel.kick"), () -> host.kick(Profiles.id(profile))));
 			rows.add(new SteamList.Person(steamId != null ? steamId : 0, info.getSkin(), name, detail,
-					steamId != null ? FriendRows.GREEN : 0, null, null, menu));
+					friend ? FriendRows.GREEN : steamId != null ? FriendRows.BLUE : 0, null, null, menu));
 		}
 		return rows;
 	}

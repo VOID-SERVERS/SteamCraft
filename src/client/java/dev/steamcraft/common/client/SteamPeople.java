@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import dev.steamcraft.common.SteamRuntime;
 import dev.steamcraft.common.client.gui.Gfx;
 import dev.steamcraft.core.Log;
+import dev.steamcraft.core.identity.PlayerUuids;
 import dev.steamcraft.core.steam.SteamClient;
 import dev.steamcraft.core.steam.SteamFriend;
 import net.minecraft.Util;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class SteamPeople {
@@ -45,6 +47,17 @@ public final class SteamPeople {
 	public static SteamFriend friend(long steamId) {
 		wanted();
 		return friendsById.get(steamId);
+	}
+
+	public static Long friendPlaying(UUID player, String name) {
+		Long joinedHost = PresencePublisher.currentHost();
+		for (SteamFriend friend : friends()) {
+			if (PlayerUuids.fromSteam(friend.steamId).equals(player)) return friend.steamId;
+			if (joinedHost != null && joinedHost == friend.steamId && friend.activity != null && name.equals(friend.activity.player)) {
+				return friend.steamId;
+			}
+		}
+		return null;
 	}
 
 	public static void refreshSoon() {

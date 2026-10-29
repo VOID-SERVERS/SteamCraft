@@ -1,6 +1,7 @@
 package dev.steamcraft.common.client;
 
 import dev.steamcraft.common.SteamCraftServer;
+import dev.steamcraft.common.Profiles;
 import dev.steamcraft.common.SteamRuntime;
 import dev.steamcraft.core.config.CoopAccess;
 import dev.steamcraft.core.identity.SteamIds;
@@ -74,7 +75,13 @@ public final class PresencePublisher {
 				minecraft.level.dimension().location().toString(),
 				//?}
 				name,
-				host != null ? host : 0);
+				host != null ? host : 0,
+				hosting != null ? Profiles.name(minecraft.player.getGameProfile()) : null);
+	}
+
+	public static Long currentHost() {
+		ServerData server = Minecraft.getInstance().getCurrentServer();
+		return server != null ? hostOf(server.ip) : null;
 	}
 
 	private static Long hostOf(String address) {

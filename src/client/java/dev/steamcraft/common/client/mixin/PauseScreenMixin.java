@@ -41,13 +41,13 @@ abstract class PauseScreenMixin extends Screen {
 			int panelHeight = SkinPanel.height();
 			int middle = menuMiddle();
 			int top = Math.max(MARGIN, Math.min(height - MARGIN - panelHeight, middle - panelHeight / 2));
-			SkinPanel.addTo(new ScreenRectangle(menuLeft - SkinPanel.WIDTH, top, SkinPanel.WIDTH, panelHeight), this::addRenderableWidget);
+			SkinPanel.addTo(new ScreenRectangle(menuLeft - SkinPanel.WIDTH, top, SkinPanel.WIDTH, panelHeight), widget -> addRenderableWidget(widget));
 		}
 
 		int panelWidth = Math.min(SteamPanel.MAX_WIDTH, width - MARGIN - menuRight);
 		if (panelWidth >= SteamPanel.MIN_WIDTH) {
 			SteamPanel.addTo(this, new ScreenRectangle(width - MARGIN - panelWidth, MARGIN, panelWidth, buttonTop - 4 - MARGIN),
-					this::addRenderableWidget);
+					widget -> addRenderableWidget(widget));
 		} else {
 			addRenderableWidget(Button.builder(Component.translatable("steamcraft.panel.title"), b -> minecraft.setScreen(new SteamPanelScreen(this)))
 					.bounds(width - MARGIN - 90, MARGIN, 90, 20).build());

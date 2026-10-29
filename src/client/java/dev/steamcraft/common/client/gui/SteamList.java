@@ -1,5 +1,6 @@
 package dev.steamcraft.common.client.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.steamcraft.common.client.SteamPeople;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -259,19 +260,19 @@ public final class SteamList extends AbstractWidget {
 	}
 
 	private boolean clickRow(Row row, int y, double mouseX, double mouseY, int button) {
-		if (row instanceof Header header && button == 0 && header.toggle() != null) {
+		if (row instanceof Header header && button == InputConstants.MOUSE_BUTTON_LEFT && header.toggle() != null) {
 			click();
 			header.toggle().run();
 			refresh();
 			return true;
 		}
 		if (!(row instanceof Person person)) return true;
-		if (button == 1 && !person.menu().isEmpty()) {
+		if (button == InputConstants.MOUSE_BUTTON_RIGHT && !person.menu().isEmpty()) {
 			openMenu(person.menu(), (int) mouseX, (int) mouseY);
 			return true;
 		}
 		Action action = person.action();
-		if (button != 0 || action == null || !action.active()) return true;
+		if (button != InputConstants.MOUSE_BUTTON_LEFT || action == null || !action.active()) return true;
 		int buttonWidth = buttonWidth(action);
 		int buttonX = getRight() - 6 - buttonWidth;
 		int buttonY = y + (PERSON_HEIGHT - BUTTON_HEIGHT) / 2;

@@ -1,5 +1,6 @@
 package dev.steamcraft.common.client.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -101,13 +102,15 @@ final class Dropdown<T> extends AbstractWidget {
 	protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
 		boolean overHeader = mouseX >= getX() && mouseX < getRight() && mouseY >= getY() && mouseY < getBottom();
 		Gfx.sprite(graphics, SPRITES.get(active, open || overHeader && active), getX(), getY(), getWidth(), getHeight());
-		int textLeft = getX() + 6;
-		if (icon != null && selected != null) {
-			icon.draw(graphics, selected, textLeft, getY() + (getHeight() - ICON) / 2, ICON);
-			textLeft += ICON + 4;
-		}
 		int color = active ? 0xFFFFFFFF : 0xFFA0A0A0;
-		Gfx.label(graphics, font, getMessage(), textLeft, getY(), getRight() - 14, getBottom(), color);
+		int left = getX() + 4;
+		int right = getRight() - 14;
+		boolean withIcon = icon != null && selected != null;
+		int iconSpace = withIcon ? ICON + 4 : 0;
+		int textWidth = Math.min(font.width(getMessage()), right - left - iconSpace);
+		int start = left + Math.max(0, (right - left - iconSpace - textWidth) / 2);
+		if (withIcon) icon.draw(graphics, selected, start, getY() + (getHeight() - ICON) / 2, ICON);
+		Gfx.label(graphics, font, getMessage(), start + iconSpace, getY(), start + iconSpace + textWidth, getBottom(), color);
 		graphics.drawString(font, open ? "▲" : "▼", getRight() - 11, getY() + (getHeight() - 8) / 2, color, false);
 		if (open) Gfx.overlay(overlay -> renderList(overlay, mouseX, mouseY));
 	}
@@ -167,7 +170,7 @@ final class Dropdown<T> extends AbstractWidget {
 			if (overList(mouseX, mouseY)) {
 				int index = scroll + (int) ((mouseY - listTop) / ROW);
 				open = false;
-				if (button == 0 && index < shown.size()) {
+				if (button == InputConstants.MOUSE_BUTTON_LEFT && index < shown.size()) {
 					playClick();
 					onPick.accept(shown.get(index));
 				}
@@ -176,7 +179,7 @@ final class Dropdown<T> extends AbstractWidget {
 			open = false;
 			return overHeader;
 		}
-		if (button != 0 || !overHeader) return false;
+		if (button != InputConstants.MOUSE_BUTTON_LEFT || !overHeader) return false;
 		playClick();
 		openList();
 		return true;

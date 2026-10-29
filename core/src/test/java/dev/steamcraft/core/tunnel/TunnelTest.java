@@ -53,6 +53,8 @@ class TunnelTest {
 	void bytesFlowBothWaysAndServerSeesTheSteamId() throws Exception {
 		try (Socket socket = new Socket(InetAddress.getLoopbackAddress(), clients.portFor(HOST))) {
 			socket.setSoTimeout(5000);
+			socket.getOutputStream().write(42);
+			assertEquals(42, socket.getInputStream().read());
 			byte[] payload = new byte[200_000];
 			new Random(1).nextBytes(payload);
 			socket.getOutputStream().write(payload);
