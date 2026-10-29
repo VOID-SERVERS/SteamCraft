@@ -4,10 +4,10 @@
 
 SteamCraft connects Minecraft to Steam. Open your singleplayer world to your Steam friends in two clicks, see who is online right from the pause menu, wear your own skin and cape, and protect your offline-mode server with Steam sign-in.
 
-- 🌍 **Co-op through Steam** — friends join your world through Steam's network, wherever they are.
-- 👥 **Friends in the pause menu** — see who is online, invite them, manage players in your world.
-- 👕 **Skins and capes** — use any PNG you like and switch it in seconds.
-- 🛡️ **Server protection** — every player on your offline-mode server signs in with their Steam account.
+- **Co-op through Steam** — friends join your world through Steam's network, wherever they are.
+- **Friends in the pause menu** — see who is online, invite them, manage players in your world.
+- **Skins and capes** — use any PNG you like and switch it in seconds.
+- **Server protection** — every player on your offline-mode server signs in with their Steam account.
 
 ## Requirements
 
@@ -53,7 +53,6 @@ Your friend must have their world open first. Then do any of these:
 
 - Click **Join game** on your friend in the Steam friends list, or accept their invite.
 - In Minecraft, go to **Multiplayer → SteamCraft → Play** and click **Join** next to your friend.
-- On the same tab, enter your friend's SteamID64 and click **Join**.
 
 If you are already in a world, SteamCraft asks before taking you to your friend's.
 
