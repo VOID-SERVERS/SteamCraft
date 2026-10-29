@@ -1,8 +1,25 @@
+import org.gradle.api.services.BuildService
+import org.gradle.api.services.BuildServiceParameters
+
 plugins {
 	id 'dev.kikugie.stonecutter'
 }
 
 stonecutter.active '1.21.1'
+
+// ModDevGradle decompiles Minecraft in a forked JVM that takes up to a quarter of the RAM and every
+// core; one per version and loader at once would overflow memory. Only one runs at a time.
+abstract class MinecraftSetupLimit implements BuildService<BuildServiceParameters.None> {
+}
+
+def minecraftSetup = gradle.sharedServices.registerIfAbsent('minecraftSetup', MinecraftSetupLimit) {
+	maxParallelUsages = 1
+}
+allprojects {
+	tasks.matching { it.class.name.startsWith('net.neoforged.nfrtgradle.') }.configureEach {
+		usesService(minecraftSetup)
+	}
+}
 
 stonecutter.parameters {
 	replacements {

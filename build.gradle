@@ -47,4 +47,6 @@ java {
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = javaVersion
 	it.options.encoding = 'UTF-8'
+	// javac forks when the toolchain differs from Gradle's JDK; the default heap is a quarter of the RAM.
+	it.options.forkOptions.memoryMaximumSize = '1g'
 }
